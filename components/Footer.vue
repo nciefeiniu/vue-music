@@ -4,7 +4,7 @@
       <MusicPlayer style="padding-bottom: 50px;"/>
     </div>
     <div>
-      <van-tabbar v-model="tabbarActive">
+      <van-tabbar v-model="tabbarActive" @change="onChange">
         <van-tabbar-item icon="home-o">广场</van-tabbar-item>
         <van-tabbar-item icon="service-o">电台</van-tabbar-item>
         <van-tabbar-item icon="friends-o">我的</van-tabbar-item>
@@ -15,6 +15,7 @@
 
 <script>
 import MusicPlayer from "~/components/MusicPlayer.vue";
+import { mapMutations } from 'vuex';
 
 export default {
   components: {
@@ -24,6 +25,15 @@ export default {
     return {
       tabbarActive: 0
     };
+  },
+  methods: {
+    onChange(index) {
+      console.log(index);
+      this.change(index);
+    },
+    ...mapMutations({
+      change: 'pages/change'
+    })
   }
 };
 </script>

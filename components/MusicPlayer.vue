@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       play: false,
-      musicUrl: "http://m7.music.126.net/20200314182541/64602515f57431522c7325c492115be0/ymusic/500e/f4ce/82e9/4a6a8f0d35ceb2717e78c7c6c3308863.mp3"
+      musicUrl: "http://m8.music.126.net/20200314203942/7bb3742d207162a5a281ce44e5e69af0/ymusic/500e/f4ce/82e9/4a6a8f0d35ceb2717e78c7c6c3308863.mp3"
     };
   },
   methods: {
