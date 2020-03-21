@@ -16,6 +16,7 @@ export default {
     RadioPage,
     MyPage
   },
+  middleware: "checkIsLogin",
   data() {
     return {
       currentPageIndex: 0
