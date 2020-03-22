@@ -13,7 +13,7 @@ export default {
     meta: [
       { charset: 'utf-8' },
       {content: "zh-CN", "http-equiv": "content-language"},
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [

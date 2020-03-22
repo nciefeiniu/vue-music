@@ -8,6 +8,7 @@
     show-action
     shape="round"
     placeholder="搜索"
+    style="font-size: 16px!important;"
   />
   <Musics :musicList="musicList" v-show="showMusic"/>
 </div>

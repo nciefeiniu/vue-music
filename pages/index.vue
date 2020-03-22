@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import Main from '~/components/Main.vue'
-import Header from '~/components/Header.vue'
-import Footer from '~/components/Footer.vue'
+import Main from "~/components/Main.vue";
+import Header from "~/components/Header.vue";
+import Footer from "~/components/Footer.vue";
 
 export default {
   components: {
@@ -17,7 +17,7 @@ export default {
     Header,
     Footer
   }
-}
+};
 </script>
 
 <style>
@@ -26,5 +26,7 @@ export default {
   margin-bottom: 55px;
   /* min-height: 100vh; */
 }
-
+input {
+  font-size: 16px !important;
+}
 </style>
