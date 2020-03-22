@@ -24,4 +24,4 @@ RUN npm config set registry https://registry.npm.taobao.org && npm install && np
 # RUN pm2 start npm --name "green_finance" -- run start
 RUN chmod 777 ./run.sh
 
-ENTRYPOINT [ "./run.sh" ]
+CMD [ "./run.sh" ]
