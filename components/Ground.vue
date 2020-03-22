@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-bottom: 110px;">
     <div>
       <van-swipe :autoplay="3000">
         <van-swipe-item v-for="(image, index) in images" :key="index">
@@ -16,7 +16,7 @@
         <van-grid-item icon="friends" text="歌手" />
         <van-grid-item icon="music" text="排行" />
         <van-grid-item icon="bars" text="分类" />
-        <van-grid-item icon="audio" text="电台" />
+        <van-grid-item icon="audio" @click="goToRadio" text="电台" />
       </van-grid>
     </div>
     <!-- 分割线 -->
@@ -29,6 +29,7 @@
 <script>
 import DividingLine from '~/components/DividingLine.vue';
 import SongSheet from '~/components/SongSheet.vue'
+import { mapMutations } from "vuex";
 
 import Vue from "vue";
 import { Lazyload } from "vant";
@@ -43,6 +44,14 @@ export default {
     return {
       images: ["/images/1.jpg", "/images/2.jpg", "/images/3.jpg"]
     };
+  },
+  methods: {
+    ...mapMutations({
+      change: "pages/change"
+    }),
+    goToRadio() {
+      this.change(1)
+    }
   }
 };
 </script>

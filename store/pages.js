@@ -5,7 +5,11 @@ export const state = () => ({
 export const mutations = {
   change (state, index) {
     state.currentPage = index
-  },
+  }
+  
+}
+
+export const getters = {
   getData (state) {
     return state.currentPage
   }

@@ -8,7 +8,7 @@
 import Ground from "~/components/Ground.vue";
 import RadioPage from "~/components/RadioPage.vue";
 import MyPage from "~/components/MyPage.vue";
-import { mapMutations } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -34,7 +34,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({
+    ...mapGetters({
       getData: "pages/getData"
     })
   }
