@@ -15,9 +15,7 @@
     </van-grid>
 
     <van-tabs @click="onTabsClick" style="margin-top: 10px;">
-      <van-tab title="我的歌单">
-        
-      </van-tab>
+      <van-tab title="我的歌单"></van-tab>
       <van-tab title="我的电台">
         <Radio />
       </van-tab>
@@ -30,8 +28,7 @@
 <script>
 import { mapMutations, mapGetters } from "vuex";
 import Login from "~/components/Login.vue";
-import Radio from '~/components/Radio.vue'
-
+import Radio from "~/components/Radio.vue";
 
 export default {
   data() {
@@ -49,11 +46,11 @@ export default {
   async created() {
     const tokenVer = this.checklogin();
     console.log("this.checklogin()", tokenVer);
-    if (tokenVer) {
-      this.hasLogin = true;
-    } else {
-      this.hasLogin = false;
-    }
+    // if (tokenVer) {
+    //   this.hasLogin = true;
+    // } else {
+    //   this.hasLogin = false;
+    // }
     console.log(this.hasLogin);
   },
   mounted() {
@@ -63,15 +60,18 @@ export default {
   },
   methods: {
     onTabsClick() {
-      console.log('as')
+      console.log("as");
     },
     async checklogin() {
       await this.$axios
         .$post("/api/v1/api-token-verify/", { token: this.$store.state.token })
         .then(res => {
+          this.hasLogin = true;
+
           return true;
         })
         .catch(err => {
+          this.hasLogin = false;
           return false;
         });
     },
