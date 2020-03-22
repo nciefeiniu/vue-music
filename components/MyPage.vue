@@ -46,16 +46,12 @@ export default {
   async created() {
     const tokenVer = this.checklogin();
     console.log("this.checklogin()", tokenVer);
-    // if (tokenVer) {
-    //   this.hasLogin = true;
-    // } else {
-    //   this.hasLogin = false;
-    // }
     console.log(this.hasLogin);
   },
   mounted() {
     const userName = this.getUserName();
     const isLogin = this.isLogin();
+    this.hasLogin = isLogin;
     console.log("my page ", userName, isLogin, this.getUserName());
   },
   methods: {
@@ -79,8 +75,10 @@ export default {
       console.log(this.showLoginPage);
       this.showLoginPage = true;
     },
-    loginClose() {
-      this.showLoginPage = false;
+    loginClose(isLogin) {
+      this.showLoginPage = !isLogin;
+      this.hasLogin = isLogin;
+      console.log("传递过来的登录是否成功:", isLogin)
     },
     ...mapGetters({
       getUserName: "getUserName",
