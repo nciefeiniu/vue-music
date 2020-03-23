@@ -8,7 +8,7 @@
       </div>
     </div>
     <van-grid icon-size="24px">
-      <van-grid-item icon="like-o" text="喜欢" />
+      <van-grid-item icon="like-o" @click="goToLove" text="喜欢" />
       <van-grid-item icon="clock-o" text="最近" />
       <van-grid-item icon="points" text="本地" />
       <van-grid-item icon="star-o" text="关注" />
@@ -55,6 +55,9 @@ export default {
     console.log("my page ", userName, isLogin, this.getUserName());
   },
   methods: {
+    goToLove() {
+      this.$router.push('/myLove');
+    },
     onTabsClick() {
       console.log("as");
     },

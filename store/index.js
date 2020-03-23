@@ -26,6 +26,9 @@ export const getters = {
   },
   isLogin(state) {
     return state.isLogin
+  },
+  getToken(state) {
+    return state.token
   }
 }
 

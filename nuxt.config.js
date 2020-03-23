@@ -33,7 +33,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    {src: '~plugins/vant', ssr: true}
+    {src: '~plugins/vant', ssr: true},
+    {src: '~plugins/axios'}
   ],
   /*
   ** Nuxt.js dev-modules
