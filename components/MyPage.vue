@@ -4,7 +4,7 @@
       <van-button type="primary" round @click="showButton" v-if="!hasLogin">立即登录</van-button>
       <div v-else>
         <van-image round width="50px" height="50px" src="https://img.yzcdn.cn/vant/cat.jpeg"></van-image>
-        <div class="text">啦啦啦</div>
+        <div class="text">{{userName}}</div>
       </div>
     </div>
     <van-grid icon-size="24px">
@@ -42,7 +42,8 @@ export default {
       myLoveShow: false,
       tabsName: ["我的歌单", "我的电台"],
       showLoginPage: false,
-      hasLogin: true
+      hasLogin: true,
+      userName: ''
     };
   },
   middleware: "checkIsLogin",
@@ -59,8 +60,19 @@ export default {
   mounted() {
     const userName = this.getUserName();
     const isLogin = this.isLogin();
+    this.userName = userName;
     this.hasLogin = isLogin;
     console.log("my page ", userName, isLogin, this.getUserName());
+  },
+  computed: {
+    storeUserName() {
+      return this.$store.state.userName;
+    }
+  },
+  watch: {
+    storeUserName(newVal, oldVal) {
+      this.userName = newVal;
+    }
   },
   methods: {
     goToLove() {

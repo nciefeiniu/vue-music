@@ -5,7 +5,7 @@
     :thumb="url"
   >
     <div slot="tags">
-      <van-tag plain type="danger" v-for="label in labels">{{label}}</van-tag>
+      <van-tag plain type="danger" v-for="label in labels" :key="label">{{label}}</van-tag>
     </div>
   </van-card>
 </template>
