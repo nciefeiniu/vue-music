@@ -2,7 +2,7 @@
   <div style="margin-bottom: 160px;">
     <div :class="{user_box: !hasLogin, uesr_box_login: hasLogin}">
       <van-button type="primary" round @click="showButton" v-if="!hasLogin">立即登录</van-button>
-      <div v-else>
+      <div v-else @click="clickPhoto">
         <van-image round width="50px" height="50px" src="https://img.yzcdn.cn/vant/cat.jpeg"></van-image>
         <div class="text">{{userName}}</div>
       </div>
@@ -23,10 +23,13 @@
 
     <Login @loginClose="loginClose" v-if="showLoginPage" />
 
-    <!-- 喜欢弹出城 -->
+    <!-- 我喜欢的音乐弹出 -->
     <van-popup v-model="myLoveShow" position="top" closeable :style="{ height: '100%' }" >
       <MyLove />
     </van-popup>
+
+    <!-- 左侧菜单弹出 -->
+    <Menu @leftMenuClosed="leftMenuClosed" v-if="showLeftMenu"/>
   </div>
 </template>
 
@@ -35,6 +38,7 @@ import { mapMutations, mapGetters } from "vuex";
 import Login from "~/components/Login.vue";
 import Radio from "~/components/Radio.vue";
 import MyLove from "~/components/MyLove.vue";
+import Menu from '~/components/left_pop/Menu.vue';
 
 export default {
   data() {
@@ -43,14 +47,16 @@ export default {
       tabsName: ["我的歌单", "我的电台"],
       showLoginPage: false,
       hasLogin: true,
-      userName: ''
+      userName: '',
+      showLeftMenu: false
     };
   },
   middleware: "checkIsLogin",
   components: {
     Login,
     Radio,
-    MyLove
+    MyLove,
+    Menu
   },
   async created() {
     const tokenVer = this.checklogin();
@@ -75,8 +81,17 @@ export default {
     }
   },
   methods: {
+    clickPhoto() {
+      this.showLeftMenu = true;
+      this.myLoveShow = false;
+      this.showLoginPage = false;
+    },
+    leftMenuClosed() {
+      this.showLeftMenu = false;
+    },
     goToLove() {
       this.myLoveShow = true;
+      this.showLeftMenu = false;
     },
     onTabsClick() {
       console.log("as");
