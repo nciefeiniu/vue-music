@@ -26,6 +26,16 @@ export default {
       tabbarActive: 0
     };
   },
+  computed: {
+    tabbarIndex() {
+      return this.$store.state.pages.currentPage;
+    }
+  },
+  watch: {
+    tabbarIndex(newVal, oldVal) {
+      this.tabbarActive = newVal;
+    }
+  },
   methods: {
     onChange(index) {
       console.log(index);

@@ -16,7 +16,7 @@
 
     <van-tabs @click="onTabsClick" style="margin-top: 10px;">
       <van-tab title="我的歌单">
-        <Radio />
+        <SongSheet v-for="songSheet in mySongSheetList" :key="songSheet.id" :url="songSheet.img_url" :title="songSheet.sheet_name" :desc="songSheet.song_sheet_desc"/>
       </van-tab>
       <van-tab title="我的电台">
         <Radio />
@@ -41,8 +41,17 @@ import Login from "~/components/Login.vue";
 import Radio from "~/components/Radio.vue";
 import MyLove from "~/components/MyLove.vue";
 import Menu from '~/components/left_pop/Menu.vue';
+import SongSheet from '~/components/SongSheet.vue'
 
 export default {
+  middleware: "checkIsLogin",
+  components: {
+    Login,
+    Radio,
+    MyLove,
+    Menu,
+    SongSheet
+  },
   data() {
     return {
       myLoveShow: false,
@@ -50,21 +59,15 @@ export default {
       showLoginPage: false,
       hasLogin: true,
       userName: '',
-      showLeftMenu: false
+      showLeftMenu: false,
+      mySongSheetList: []
     };
-  },
-  middleware: "checkIsLogin",
-  components: {
-    Login,
-    Radio,
-    MyLove,
-    Menu
   },
   async created() {
     const tokenVer = this.checklogin();
     console.log("this.checklogin()", tokenVer);
     console.log(this.hasLogin);
-    this.$axios.$get("/api/v1/music/song_sheets/")
+    
   },
   mounted() {
     const userName = this.getUserName();
@@ -72,6 +75,13 @@ export default {
     this.userName = userName;
     this.hasLogin = isLogin;
     console.log("my page ", userName, isLogin, this.getUserName());
+    this.$axios.$get("/api/v1/music/song_sheets/").then(resp => {
+      if(resp.code === 200) {
+        this.mySongSheetList = resp.data
+      }
+    }).catch(err => {
+
+    })
   },
   computed: {
     storeUserName() {

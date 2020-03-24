@@ -22,7 +22,13 @@
     <!-- 分割线 -->
     <DividingLine title="为你推荐歌单" />
     <!-- 歌单 -->
-    <SongSheet />
+    <SongSheet
+      v-for="songSheet in publicSongSheetList"
+      :key="songSheet.id"
+      :url="songSheet.img_url"
+      :title="songSheet.sheet_name"
+      :desc="songSheet.song_sheet_desc"
+    />
 
     <!-- 热歌 -->
     <van-popup v-model="hotMusicShow" position="top" closeable :style="{ height: '100%' }">
@@ -49,11 +55,25 @@ export default {
   },
   data() {
     return {
+      publicSongSheetList: [],
       hotMusicShow: false,
       images: ["/images/1.jpg", "/images/2.jpg", "/images/3.jpg"]
     };
   },
+  mounted(){
+    this.getPublicSongSheet();
+  },
   methods: {
+    getPublicSongSheet() {
+      this.$axios
+        .$get("/api/v1/music/public_song_sheet/")
+        .then(resp => {
+          if (resp.code === 200) {
+            this.publicSongSheetList = resp.data;
+          }
+        })
+        .catch(err => {});
+    },
     showHotMusic() {
       this.hotMusicShow = true;
     },
