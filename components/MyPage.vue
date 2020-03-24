@@ -22,6 +22,11 @@
     </van-tabs>
 
     <Login @loginClose="loginClose" v-if="showLoginPage" />
+
+    <!-- 喜欢弹出城 -->
+    <van-popup v-model="myLoveShow" position="top" closeable :style="{ height: '100%' }" >
+      <MyLove />
+    </van-popup>
   </div>
 </template>
 
@@ -29,10 +34,12 @@
 import { mapMutations, mapGetters } from "vuex";
 import Login from "~/components/Login.vue";
 import Radio from "~/components/Radio.vue";
+import MyLove from "~/components/MyLove.vue";
 
 export default {
   data() {
     return {
+      myLoveShow: false,
       tabsName: ["我的歌单", "我的电台"],
       showLoginPage: false,
       hasLogin: true
@@ -41,7 +48,8 @@ export default {
   middleware: "checkIsLogin",
   components: {
     Login,
-    Radio
+    Radio,
+    MyLove
   },
   async created() {
     const tokenVer = this.checklogin();
@@ -56,7 +64,7 @@ export default {
   },
   methods: {
     goToLove() {
-      this.$router.push('/myLove');
+      this.myLoveShow = true;
     },
     onTabsClick() {
       console.log("as");
@@ -81,7 +89,7 @@ export default {
     loginClose(isLogin) {
       this.showLoginPage = !isLogin;
       this.hasLogin = isLogin;
-      console.log("传递过来的登录是否成功:", isLogin)
+      console.log("传递过来的登录是否成功:", isLogin);
     },
     ...mapGetters({
       getUserName: "getUserName",

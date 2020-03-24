@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <van-nav-bar title="我喜欢的音乐" left-text="返回" left-arrow @click-left="onClickLeft" />
+  <div style="margin-top: 30px;">
     <Musics :musicList="musicList" />
   </div>
 </template>

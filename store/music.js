@@ -10,6 +10,14 @@ export const mutations = {
   setMusicList(state, musicList){
     state.musicList = musicList
   },
+  pushMusicListWait(state, musicInfo){
+    for(let i=0; i<state.musicList.length; i++) {
+      if (musicInfo.id === state.musicList[i].id) {
+        return
+      }
+    }
+    state.musicList.push(musicInfo)
+  },
   pushMusicList(state, musicInfo) {
 
     for(let i=0; i<state.musicList.length; i++) {
