@@ -15,7 +15,9 @@
     </van-grid>
 
     <van-tabs @click="onTabsClick" style="margin-top: 10px;">
-      <van-tab title="我的歌单"></van-tab>
+      <van-tab title="我的歌单">
+        <Radio />
+      </van-tab>
       <van-tab title="我的电台">
         <Radio />
       </van-tab>
@@ -62,6 +64,7 @@ export default {
     const tokenVer = this.checklogin();
     console.log("this.checklogin()", tokenVer);
     console.log(this.hasLogin);
+    this.$axios.$get("/api/v1/music/song_sheets/")
   },
   mounted() {
     const userName = this.getUserName();
