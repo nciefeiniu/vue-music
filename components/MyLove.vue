@@ -16,7 +16,7 @@ export default {
       musicList: []
     };
   },
-  created() {
+  mounted() {
     this.$axios
       .$get("/api/v1/music/love_music")
       .then(resp => {
