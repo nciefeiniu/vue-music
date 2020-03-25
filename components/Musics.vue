@@ -16,11 +16,14 @@
     </van-list>
     <!-- 选择 -->
     <van-action-sheet v-model="showSelect" :actions="actions" @select="onSelect" />
+    <!-- 添加歌曲到歌单 -->
+    <Add2SongSheet :musicId="musicId" @addSongSheetClosed="addSongSheetClosed" v-if="showAddMusicSongSheet"/>
   </div>
 </template>
 
 <script>
 import { mapMutations, mapGetters } from "vuex";
+import Add2SongSheet from '~/components/song_sheet/Add2SongSheet.vue'
 
 export default {
   props: {
@@ -28,17 +31,27 @@ export default {
       default: () => {
         return [];
       }
+    },
+    actions: {
+      default: () => {
+        return [
+          { name: "播放", id: "play" },
+          { name: "加入播放列表", id: "add_plays" },
+          { name: "喜欢", id: "love" },
+          { name: "加入歌单", id: "addSongSheet" }
+        ];
+      }
     }
+  },
+  components: {
+    Add2SongSheet
   },
   data() {
     return {
+      showAddMusicSongSheet: false,
       showSelect: false,
-      actions: [
-        { name: "播放", id: "play" },
-        { name: "加入播放列表", id: "add_plays" },
-        { name: "喜欢", id: "love" }
-      ],
-      currentMusicInfo: {}
+      currentMusicInfo: {},
+      musicId: null
     };
   },
   methods: {
@@ -55,16 +68,27 @@ export default {
       } else if (item.id === "add_plays") {
         this.pushMusicListWait(musicInfo);
       } else if (item.id === "love") {
-        this.addToMyLoveMusic(item)
+        this.addToMyLoveMusic(item);
+      } else if (item.id === "addSongSheet") {
+        console.log("添加音乐到歌单", musicInfo);
+        this.showSelect = false;
+        this.musicId = musicInfo.id;
+        this.showAddMusicSongSheet = true;
       }
     },
+    addSongSheetClosed() {
+      this.showAddMusicSongSheet = false;
+    },
     addToMyLoveMusic(item) {
-      this.$axios.$post('/api/v1/music/love_music/', this.currentMusicInfo).then(resp => {
-        console.log(resp)
-        Toast.success('添加到喜欢歌曲OK');
-      }).catch(err => {
-        console.log(err)
-      })
+      this.$axios
+        .$post("/api/v1/music/love_music/", this.currentMusicInfo)
+        .then(resp => {
+          console.log(resp);
+          Toast.success("添加到喜欢歌曲OK");
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     addToMusic(musicInfo) {
       // 播放音乐

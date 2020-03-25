@@ -1,6 +1,6 @@
 <template>
   <div style="margin-top: 30px;">
-    <Musics :musicList="musicList" />
+    <Musics :musicList="musicList" :actions="actions" />
   </div>
 </template>
 
@@ -13,7 +13,11 @@ export default {
   },
   data() {
     return {
-      musicList: []
+      musicList: [],
+      actions: [
+          { name: "播放", id: "play" },
+          { name: "加入播放列表", id: "add_plays" },
+        ]
     };
   },
   mounted() {
