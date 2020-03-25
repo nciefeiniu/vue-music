@@ -16,7 +16,14 @@
 
     <van-tabs @click="onTabsClick" style="margin-top: 10px;">
       <van-tab title="我的歌单">
-        <SongSheet v-for="songSheet in mySongSheetList" :key="songSheet.id" :url="songSheet.img_url" :title="songSheet.sheet_name" :desc="songSheet.song_sheet_desc"/>
+        <SongSheet
+          v-for="songSheet in mySongSheetList"
+          :key="songSheet.id"
+          :url="songSheet.img_url"
+          :title="songSheet.sheet_name"
+          :desc="songSheet.song_sheet_desc"
+          @click.native="clickSongSheet(songSheet.id)"
+        />
       </van-tab>
       <van-tab title="我的电台">
         <Radio />
@@ -26,12 +33,15 @@
     <Login @loginClose="loginClose" v-if="showLoginPage" />
 
     <!-- 我喜欢的音乐弹出 -->
-    <van-popup v-model="myLoveShow" position="top" closeable :style="{ height: '100%' }" >
+    <van-popup v-model="myLoveShow" position="top" closeable :style="{ height: '100%' }">
       <MyLove />
     </van-popup>
 
     <!-- 左侧菜单弹出 -->
-    <Menu @leftMenuClosed="leftMenuClosed" v-if="showLeftMenu"/>
+    <Menu @leftMenuClosed="leftMenuClosed" v-if="showLeftMenu" />
+
+    <!-- 歌单音乐弹窗 -->
+    <SongSheetMusics v-if="songSheetShow" :sid="currentSongSheetID" @songSheetMusicsClosed="songSheetMusicsClosed" />
   </div>
 </template>
 
@@ -40,34 +50,44 @@ import { mapMutations, mapGetters } from "vuex";
 import Login from "~/components/Login.vue";
 import Radio from "~/components/Radio.vue";
 import MyLove from "~/components/MyLove.vue";
-import Menu from '~/components/left_pop/Menu.vue';
-import SongSheet from '~/components/SongSheet.vue'
+import Menu from "~/components/left_pop/Menu.vue";
+import SongSheet from "~/components/SongSheet.vue";
+import Musics from "~/components/Musics.vue";
+import SongSheetMusics from '~/components/song_sheet/SongSheetMusics.vue'
 
 export default {
   middleware: "checkIsLogin",
   components: {
+    Musics,
     Login,
     Radio,
     MyLove,
     Menu,
-    SongSheet
+    SongSheet,
+    SongSheetMusics
   },
   data() {
     return {
       myLoveShow: false,
+      songSheetShow: false,
       tabsName: ["我的歌单", "我的电台"],
       showLoginPage: false,
       hasLogin: true,
-      userName: '',
+      userName: "",
       showLeftMenu: false,
-      mySongSheetList: []
+      mySongSheetList: [],
+      songSheetMusics: [],
+      currentSongSheetID: null,
+      songSheetMusicActions: [
+        { name: "播放", id: "play" },
+        { name: "播放全部", id: "playall" }
+      ]
     };
   },
   async created() {
     const tokenVer = this.checklogin();
     console.log("this.checklogin()", tokenVer);
     console.log(this.hasLogin);
-    
   },
   mounted() {
     const userName = this.getUserName();
@@ -75,13 +95,14 @@ export default {
     this.userName = userName;
     this.hasLogin = isLogin;
     console.log("my page ", userName, isLogin, this.getUserName());
-    this.$axios.$get("/api/v1/music/song_sheets/").then(resp => {
-      if(resp.code === 200) {
-        this.mySongSheetList = resp.data
-      }
-    }).catch(err => {
-
-    })
+    this.$axios
+      .$get("/api/v1/music/song_sheets/")
+      .then(resp => {
+        if (resp.code === 200) {
+          this.mySongSheetList = resp.data;
+        }
+      })
+      .catch(err => {});
   },
   computed: {
     storeUserName() {
@@ -94,6 +115,13 @@ export default {
     }
   },
   methods: {
+    clickSongSheet(sid) {
+      this.currentSongSheetID = sid;
+      this.songSheetShow = true;
+    },
+    songSheetMusicsClosed() {
+      this.songSheetShow = false
+    },
     clickPhoto() {
       this.showLeftMenu = true;
       this.myLoveShow = false;

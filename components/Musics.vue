@@ -17,13 +17,17 @@
     <!-- 选择 -->
     <van-action-sheet v-model="showSelect" :actions="actions" @select="onSelect" />
     <!-- 添加歌曲到歌单 -->
-    <Add2SongSheet :musicId="musicId" @addSongSheetClosed="addSongSheetClosed" v-if="showAddMusicSongSheet"/>
+    <Add2SongSheet
+      :musicId="musicId"
+      @addSongSheetClosed="addSongSheetClosed"
+      v-if="showAddMusicSongSheet"
+    />
   </div>
 </template>
 
 <script>
 import { mapMutations, mapGetters } from "vuex";
-import Add2SongSheet from '~/components/song_sheet/Add2SongSheet.vue'
+import Add2SongSheet from "~/components/song_sheet/Add2SongSheet.vue";
 
 export default {
   props: {
@@ -64,7 +68,7 @@ export default {
         this.setCurrentName(musicInfo.music_name);
         console.log("vuex: ", this.getMusicList());
         this.setCurrentID(musicInfo.id);
-        this.setCurrentName(musicInfo.music_name);
+        // this.setCurrentName(musicInfo.music_name);
       } else if (item.id === "add_plays") {
         this.pushMusicListWait(musicInfo);
       } else if (item.id === "love") {
@@ -74,6 +78,11 @@ export default {
         this.showSelect = false;
         this.musicId = musicInfo.id;
         this.showAddMusicSongSheet = true;
+      } else if (item.id === "playall") {
+        this.setMusicList(this.musicList)
+        this.setCurrentName(this.musicList[0].music_name);
+        console.log("vuex: ", this.getMusicList());
+        this.setCurrentID(this.musicList[0].id);
       }
     },
     addSongSheetClosed() {

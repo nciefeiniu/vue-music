@@ -28,12 +28,16 @@
       :url="songSheet.img_url"
       :title="songSheet.sheet_name"
       :desc="songSheet.song_sheet_desc"
+      @click.native="clickSongSheet(songSheet.id)"
     />
 
     <!-- 热歌 -->
     <van-popup v-model="hotMusicShow" position="top" closeable :style="{ height: '100%' }">
       <HotMuisc />
     </van-popup>
+
+    <!-- 歌单音乐弹窗 -->
+    <SongSheetMusics v-if="songSheetShow" :sid="currentSongSheetID" @songSheetMusicsClosed="songSheetMusicsClosed" />
   </div>
 </template>
 
@@ -42,6 +46,8 @@ import DividingLine from "~/components/DividingLine.vue";
 import SongSheet from "~/components/SongSheet.vue";
 import HotMuisc from "~/components/HotMusic.vue";
 import { mapMutations } from "vuex";
+import SongSheetMusics from '~/components/song_sheet/SongSheetMusics.vue'
+
 
 import Vue from "vue";
 import { Lazyload } from "vant";
@@ -51,10 +57,13 @@ export default {
   components: {
     DividingLine,
     SongSheet,
-    HotMuisc
+    HotMuisc,
+    SongSheetMusics
   },
   data() {
     return {
+      songSheetShow: false,
+      currentSongSheetID: null,
       publicSongSheetList: [],
       hotMusicShow: false,
       images: ["/images/1.jpg", "/images/2.jpg", "/images/3.jpg"]
@@ -64,6 +73,13 @@ export default {
     this.getPublicSongSheet();
   },
   methods: {
+    clickSongSheet(sid) {
+      this.currentSongSheetID = sid;
+      this.songSheetShow = true;
+    },
+    songSheetMusicsClosed() {
+      this.songSheetShow = false
+    },
     getPublicSongSheet() {
       this.$axios
         .$get("/api/v1/music/public_song_sheet/")
