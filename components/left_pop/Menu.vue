@@ -10,6 +10,7 @@
       </van-col>
       <van-col span="18">
         <CreateSongSheet v-if="activeKey == 0"/>
+        <UploadMusic v-else-if="activeKey == 2" />
       </van-col>
     </van-row>
   </van-popup>
@@ -17,10 +18,12 @@
 
 <script>
 import CreateSongSheet from '~/components/left_pop/CreateSongSheet.vue';
+import UploadMusic from '~/components/radio/UploadMusic.vue';
 
 export default {
   components: {
-    CreateSongSheet
+    CreateSongSheet,
+    UploadMusic
   },
   data() {
     return {
