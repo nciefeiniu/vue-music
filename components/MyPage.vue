@@ -26,7 +26,13 @@
         />
       </van-tab>
       <van-tab title="我的电台">
-        <Radio />
+        <Radio v-for="songSheet in myRadios"
+          :key="songSheet.id"
+          :url="songSheet.img_url"
+          :title="songSheet.sheet_name"
+          :desc="songSheet.song_sheet_desc"
+          @click.native="clickRadio(songSheet.id)"
+          />
       </van-tab>
     </van-tabs>
 
@@ -81,7 +87,8 @@ export default {
       songSheetMusicActions: [
         { name: "播放", id: "play" },
         { name: "播放全部", id: "playall" }
-      ]
+      ],
+      myRadios: []
     };
   },
   async created() {
@@ -95,6 +102,7 @@ export default {
     this.userName = userName;
     this.hasLogin = isLogin;
     console.log("my page ", userName, isLogin, this.getUserName());
+    this.getMyRadio();
     this.$axios
       .$get("/api/v1/music/song_sheets/")
       .then(resp => {
@@ -115,6 +123,19 @@ export default {
     }
   },
   methods: {
+    clickRadio(radioID) {
+      console.log('点击电台')
+    },
+    getMyRadio() {
+      // 获取我创建的电台
+      this.$axios.$get("/api/v1/music/radio/").then(resp => {
+        if (resp.code === 200) {
+          this.myRadios = resp.data
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     clickSongSheet(sid) {
       this.currentSongSheetID = sid;
       this.songSheetShow = true;
