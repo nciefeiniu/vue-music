@@ -3,7 +3,7 @@
     <SongSheet
       v-for="songSheet in mySongSheetList"
       :key="songSheet.id"
-      :url="songSheet.img_url"
+      :url="baseURL + songSheet.img_url"
       :title="songSheet.sheet_name"
       :desc="songSheet.song_sheet_desc"
       @click.native="add2SongSheet(songSheet.id)"
@@ -25,6 +25,7 @@ export default {
   },
   data() {
     return {
+      baseURL: process.env.APIURL || "http://127.0.0.1:8000",
       showPop: true,
       mySongSheetList: []
     };
