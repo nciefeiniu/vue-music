@@ -55,7 +55,7 @@ export default {
     proxy: true // Can be also an object with default options
   },
   proxy: {
-    '/api/v1/': 'http://192.168.3.100:8000',
+    '/api/v1/': process.env.BCAPI || 'http://192.168.3.100:8000',
   },
   /*
   ** Build configuration

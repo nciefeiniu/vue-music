@@ -1,14 +1,27 @@
 <template>
   <div style="margin-bottom: 160px;">
     <div :class="{user_box: !hasLogin, uesr_box_login: hasLogin}">
-      <van-button type="primary" round @click="showButton" v-if="!hasLogin">立即登录</van-button>
+      <van-button
+        type="primary"
+        round
+        @click="showButton('login')"
+        v-if="!hasLogin"
+        style="margin: 10px auto;"
+      >立即登录</van-button>
+      <van-button
+        type="primary"
+        round
+        @click="showButton('register')"
+        v-if="!hasLogin"
+        style="margin: 10px auto;"
+      >立即注册</van-button>
       <div v-else @click="clickPhoto">
         <van-image round width="50px" height="50px" src="https://img.yzcdn.cn/vant/cat.jpeg"></van-image>
         <div class="text">{{userName}}</div>
       </div>
     </div>
     <van-grid icon-size="24px">
-      <van-grid-item icon="like-o" @click="goToLove" text="喜欢" />
+      <van-grid-item icon="like-o" dot @click="goToLove" text="喜欢" />
       <van-grid-item icon="clock-o" text="最近" />
       <van-grid-item icon="points" text="本地" />
       <van-grid-item icon="star-o" text="关注" />
@@ -26,17 +39,18 @@
         />
       </van-tab>
       <van-tab title="我的电台">
-        <Radio v-for="songSheet in myRadios"
+        <Radio
+          v-for="songSheet in myRadios"
           :key="songSheet.id"
           :url="songSheet.img_url"
           :title="songSheet.sheet_name"
           :desc="songSheet.song_sheet_desc"
           @click.native="clickRadio(songSheet.id)"
-          />
+        />
       </van-tab>
     </van-tabs>
 
-    <Login @loginClose="loginClose" v-if="showLoginPage" />
+    <Login @loginClose="loginClose" :type="loginType" v-if="showLoginPage" />
 
     <!-- 我喜欢的音乐弹出 -->
     <van-popup v-model="myLoveShow" position="top" closeable :style="{ height: '100%' }">
@@ -47,7 +61,18 @@
     <Menu @leftMenuClosed="leftMenuClosed" v-if="showLeftMenu" />
 
     <!-- 歌单音乐弹窗 -->
-    <SongSheetMusics v-if="songSheetShow" :sid="currentSongSheetID" @songSheetMusicsClosed="songSheetMusicsClosed" />
+    <SongSheetMusics
+      v-if="songSheetShow"
+      :sid="currentSongSheetID"
+      @songSheetMusicsClosed="songSheetMusicsClosed"
+    />
+
+    <!-- 电台歌曲弹窗 -->
+    <RadioMusics
+      :sid="currentRadioID"
+      v-if="showRadioPop"
+      @songSheetMusicsClosed="radioPopPageClosed"
+    />
   </div>
 </template>
 
@@ -59,7 +84,8 @@ import MyLove from "~/components/MyLove.vue";
 import Menu from "~/components/left_pop/Menu.vue";
 import SongSheet from "~/components/SongSheet.vue";
 import Musics from "~/components/Musics.vue";
-import SongSheetMusics from '~/components/song_sheet/SongSheetMusics.vue'
+import SongSheetMusics from "~/components/song_sheet/SongSheetMusics.vue";
+import RadioMusics from "~/components/radio/RadioMusics.vue";
 
 export default {
   middleware: "checkIsLogin",
@@ -70,10 +96,13 @@ export default {
     MyLove,
     Menu,
     SongSheet,
-    SongSheetMusics
+    SongSheetMusics,
+    RadioMusics
   },
   data() {
     return {
+      showRadioPop: false,
+      currentRadioID: null,
       myLoveShow: false,
       songSheetShow: false,
       tabsName: ["我的歌单", "我的电台"],
@@ -88,7 +117,8 @@ export default {
         { name: "播放", id: "play" },
         { name: "播放全部", id: "playall" }
       ],
-      myRadios: []
+      myRadios: [],
+      loginType: "login"
     };
   },
   async created() {
@@ -123,25 +153,33 @@ export default {
     }
   },
   methods: {
+    radioPopPageClosed() {
+      this.showRadioPop = false;
+    },
     clickRadio(radioID) {
-      console.log('点击电台')
+      console.log("点击电台");
+      this.currentRadioID = radioID;
+      this.showRadioPop = true;
     },
     getMyRadio() {
       // 获取我创建的电台
-      this.$axios.$get("/api/v1/music/radio/").then(resp => {
-        if (resp.code === 200) {
-          this.myRadios = resp.data
-        }
-      }).catch(err => {
-        console.log(err)
-      })
+      this.$axios
+        .$get("/api/v1/music/radio/")
+        .then(resp => {
+          if (resp.code === 200) {
+            this.myRadios = resp.data;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     clickSongSheet(sid) {
       this.currentSongSheetID = sid;
       this.songSheetShow = true;
     },
     songSheetMusicsClosed() {
-      this.songSheetShow = false
+      this.songSheetShow = false;
     },
     clickPhoto() {
       this.showLeftMenu = true;
@@ -171,9 +209,16 @@ export default {
           return false;
         });
     },
-    showButton() {
-      console.log(this.showLoginPage);
-      this.showLoginPage = true;
+    showButton(type) {
+      if (type === "login") {
+        console.log(this.showLoginPage);
+        this.loginType = "login";
+        this.showLoginPage = true;
+      } else {
+        this.loginType = "register";
+        console.log(this.showLoginPage);
+        this.showLoginPage = true;
+      }
     },
     loginClose(isLogin) {
       this.showLoginPage = !isLogin;

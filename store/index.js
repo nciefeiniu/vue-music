@@ -6,8 +6,13 @@ export const state = () => ({
 
 export const mutations = {
   setToken(state, token){
+    
     state.token = token
-    state.isLogin = true
+    if (token === null) {
+      state.isLogin = false
+    } else {
+      state.isLogin = true
+    }
   },
   setUserName(state, userName) {
     state.userName = userName

@@ -16,11 +16,18 @@
     </van-list>
     <!-- 选择 -->
     <van-action-sheet v-model="showSelect" :actions="actions" @select="onSelect" />
+
     <!-- 添加歌曲到歌单 -->
     <Add2SongSheet
       :musicId="musicId"
       @addSongSheetClosed="addSongSheetClosed"
       v-if="showAddMusicSongSheet"
+    />
+    <!-- 添加歌曲到电台 -->
+    <RadioAddMusic
+      :musicId="musicId"
+      @addSongSheetClosed="addRadioClosed"
+      v-if="showAddMusicRadio"
     />
   </div>
 </template>
@@ -28,6 +35,7 @@
 <script>
 import { mapMutations, mapGetters } from "vuex";
 import Add2SongSheet from "~/components/song_sheet/Add2SongSheet.vue";
+import RadioAddMusic from "~/components/radio/RadioAddMusic.vue";
 
 export default {
   props: {
@@ -42,23 +50,29 @@ export default {
           { name: "播放", id: "play" },
           { name: "加入播放列表", id: "add_plays" },
           { name: "喜欢", id: "love" },
-          { name: "加入歌单", id: "addSongSheet" }
+          { name: "加入歌单", id: "addSongSheet" },
+          {name: "加入我的电台", id: "add2Radio"}
         ];
       }
     }
   },
   components: {
-    Add2SongSheet
+    Add2SongSheet,
+    RadioAddMusic
   },
   data() {
     return {
       showAddMusicSongSheet: false,
+      showAddMusicRadio: false,
       showSelect: false,
       currentMusicInfo: {},
       musicId: null
     };
   },
   methods: {
+    addRadioClosed() {
+      this.showAddMusicRadio = false;
+    },
     onSelect(item) {
       console.log(item);
       this.showSelect = false;
@@ -83,6 +97,11 @@ export default {
         this.setCurrentName(this.musicList[0].music_name);
         console.log("vuex: ", this.getMusicList());
         this.setCurrentID(this.musicList[0].id);
+      } else if (item.id === 'add2Radio') {
+        console.log("添加音乐到电台", musicInfo);
+        this.showSelect = false;
+        this.musicId = musicInfo.id;
+        this.showAddMusicRadio = true;
       }
     },
     addSongSheetClosed() {
