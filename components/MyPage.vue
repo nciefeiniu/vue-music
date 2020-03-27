@@ -19,7 +19,7 @@
         <SongSheet
           v-for="songSheet in mySongSheetList"
           :key="songSheet.id"
-          :url="baseURL + songSheet.img_url"
+          :url="songSheet.img_url"
           :title="songSheet.sheet_name"
           :desc="songSheet.song_sheet_desc"
           @click.native="clickSongSheet(songSheet.id)"
@@ -28,7 +28,7 @@
       <van-tab title="我的电台">
         <Radio v-for="songSheet in myRadios"
           :key="songSheet.id"
-          :url="baseURL + songSheet.img_url"
+          :url="songSheet.img_url"
           :title="songSheet.sheet_name"
           :desc="songSheet.song_sheet_desc"
           @click.native="clickRadio(songSheet.id)"
@@ -74,7 +74,6 @@ export default {
   },
   data() {
     return {
-      baseURL: process.env.APIURL || "http://127.0.0.1:8000",
       myLoveShow: false,
       songSheetShow: false,
       tabsName: ["我的歌单", "我的电台"],

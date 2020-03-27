@@ -40,7 +40,11 @@ export default {
   ** Nuxt.js dev-modules
   */
   buildModules: [
+    '@nuxtjs/dotenv'
   ],
+  dotenv: {
+    /* module options */
+  },
   /*
   ** Nuxt.js modules
   */

@@ -88,6 +88,12 @@ export default {
         .$post("/api/v1/music/upload_image/", formData, conf)
         .then(resp => {
           console.log(resp);
+          if (! process.client) {
+            console.log(process.env)
+          console.log("环境变量", process.env.APIURL)
+          }
+          console.log(process.env)
+          console.log("环境变量", process.env.APIURL)
           const baseurl = process.env.APIURL || "http://127.0.0.1:8000/";
           that.fileList = [
             {
