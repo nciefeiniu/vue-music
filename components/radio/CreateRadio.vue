@@ -100,7 +100,7 @@ export default {
         .$post("/api/v1/music/upload_image/", formData, conf)
         .then(resp => {
           console.log(resp);
-          const baseurl = process.env.APIURL;
+          const baseurl = "http://139.9.53.199:8000/";
           console.log('huanjingbianlaiang:',baseurl);
           that.fileList = [
             {

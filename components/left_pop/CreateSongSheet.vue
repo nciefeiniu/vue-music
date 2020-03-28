@@ -94,7 +94,7 @@ export default {
           }
           console.log(process.env)
           console.log("环境变量", process.env.APIURL)
-          const baseurl = process.env.APIURL;
+          const baseurl = "http://139.9.53.199:8000/";
           that.fileList = [
             {
               url: baseurl + resp.relative_url,
