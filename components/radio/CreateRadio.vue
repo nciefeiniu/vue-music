@@ -46,6 +46,11 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import { Notify } from 'vant';
+
+Vue.use(Notify);
+
 export default {
   data() {
     return {
@@ -95,7 +100,8 @@ export default {
         .$post("/api/v1/music/upload_image/", formData, conf)
         .then(resp => {
           console.log(resp);
-          const baseurl = process.env.APIURL || "http://127.0.0.1:8000/";
+          const baseurl = process.env.APIURL;
+          console.log('huanjingbianlaiang:',baseurl);
           that.fileList = [
             {
               url: baseurl + resp.relative_url,
