@@ -4,8 +4,9 @@
     v-for="songSheet in myRadios"
     :key="songSheet.id"
     :url="songSheet.img_url"
-    :title="songSheet.sheet_name"
-    :desc="songSheet.song_sheet_desc"
+    :title="songSheet.radio_name"
+    :labels="[songSheet.label]"
+    :desc="songSheet.radio_desc"
     @click.native="clickRadio(songSheet.id)"
   />
   <!-- 电台歌曲弹窗 -->

@@ -43,8 +43,9 @@
           v-for="songSheet in myRadios"
           :key="songSheet.id"
           :url="songSheet.img_url"
-          :title="songSheet.sheet_name"
-          :desc="songSheet.song_sheet_desc"
+          :title="songSheet.radio_name"
+          :desc="songSheet.radio_desc"
+          :labels="[songSheet.label]"
           @click.native="clickRadio(songSheet.id)"
         />
       </van-tab>
