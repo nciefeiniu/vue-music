@@ -66,7 +66,8 @@ export default {
       return result;
     },
     onSubmit(values) {
-      if (this.success === false) {
+
+      if (this.type === "register" && this.success === false) {
         return;
       }
       console.log("onSubmit:", values);
