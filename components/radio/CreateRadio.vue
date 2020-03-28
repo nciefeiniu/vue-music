@@ -65,8 +65,15 @@ export default {
       console.log(values)
       this.$axios.$post("/api/v1/music/radio/", values).then(resp => {
         console.log(resp)
+        if (resp.code === 200) {
+          Notify({ type: 'success', message: '创建radio成功' });
+        } else {
+           Notify({ type: 'warning', message: '创建radio失败。' });
+        }
+        
       }).catch(err => {
         console.log(err)
+        Notify({ type: 'warning', message: '请求创建radio失败，请稍后再试。' });
       })
     },
     afterRead(file) {
@@ -98,6 +105,7 @@ export default {
           ];
           that.img_url = baseurl + resp.relative_url;
           console.log(this.fileList);
+
         })
         .catch(err => {
           that.fileList = [
