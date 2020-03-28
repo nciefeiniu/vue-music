@@ -1,26 +1,32 @@
 <template>
-  <van-popup v-model="showPop" closeable position="bottom" @closed="popClosed" :style="{ height: '60%' }">
+  <van-popup
+    v-model="showPop"
+    closeable
+    position="bottom"
+    @closed="popClosed"
+    :style="{ height: '60%' }"
+  >
     <Radio
       v-for="songSheet in mySongSheetList"
       :key="songSheet.id"
-      :url="baseURL + songSheet.img_url"
-      :title="songSheet.sheet_name"
-      :desc="songSheet.song_sheet_desc"
+      :url="songSheet.img_url"
+      :title="songSheet.radio_name"
+      :labels="[songSheet.label]"
+      :desc="songSheet.radio_desc"
       @click.native="add2SongSheet(songSheet.id)"
     />
   </van-popup>
 </template>
 
 <script>
-import Vue from 'vue';
-import { Notify } from 'vant';
+import Vue from "vue";
+import { Notify } from "vant";
 import Radio from "~/components/Radio.vue";
-
 
 Vue.use(Notify);
 
 export default {
-  props: {musicId: {default: null}},
+  props: { musicId: { default: null } },
   components: {
     Radio
   },
@@ -32,14 +38,14 @@ export default {
     };
   },
   created() {
-    this.getMySongSheets()
+    this.getMySongSheets();
   },
   mounted() {
     this.showPop = true;
   },
   methods: {
     popClosed() {
-      this.$emit("addSongSheetClosed", true)
+      this.$emit("addSongSheetClosed", true);
     },
     getMySongSheets() {
       this.$axios
@@ -52,21 +58,30 @@ export default {
         .catch(err => {});
     },
     add2SongSheet(songSheetID) {
-      console.log("请求添加API")
+      console.log("请求添加API");
       if (!this.musicId) {
-        return
+        return;
       }
-      this.$axios.$post("/api/v1/music/radio/music/", {music_id: this.musicId, radio_station_id: songSheetID}).then(resp => {
-        console.log(resp);
-        if(resp.code === 200) {
-          Notify({ type: 'success', message: '成功添加音乐到电台' });
-          this.showPop = false;
-        } else {
-          Notify({ type: 'danger', message: '添加失败，请稍后再试' });
-        }
-      }).catch(err => {
-        Notify({ type: 'danger', message: '请求后端服务器失败，请稍后再试。' });
-      })
+      this.$axios
+        .$post("/api/v1/music/radio/music/", {
+          music_id: this.musicId,
+          radio_station_id: songSheetID
+        })
+        .then(resp => {
+          console.log(resp);
+          if (resp.code === 200) {
+            Notify({ type: "success", message: "成功添加音乐到电台" });
+            this.showPop = false;
+          } else {
+            Notify({ type: "danger", message: "添加失败，请稍后再试" });
+          }
+        })
+        .catch(err => {
+          Notify({
+            type: "danger",
+            message: "请求后端服务器失败，请稍后再试。"
+          });
+        });
     }
   }
 };
